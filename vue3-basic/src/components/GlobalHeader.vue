@@ -27,6 +27,7 @@ export interface UserProps {
     name?: string;
     id?: number;
 }
+
 export default defineComponent({
     name: 'GlobalHeader',
     components: {

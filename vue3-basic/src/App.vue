@@ -1,12 +1,22 @@
 <template>
     <div class="container">
         <global-header :user="currentUser"></global-header>
-        <column-list :list="list"></column-list>
+<!--        <column-list :list="list"></column-list>-->
+        <form action="">
+            <div class="mb-3">
+                <label for="exampleInputEmail" class="form-label">邮箱地址</label>
+                <input type="email" class="form-control" id="exampleInputEmail" v-model="emailRef.val" @blur="validateEmail">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword" class="form-label">密码</label>
+                <input type="password" class="form-control" id="exampleInputPassword">
+            </div>
+        </form>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
 
@@ -45,13 +55,26 @@ const testData: ColumnProps[] = [
 export default defineComponent({
     name: 'App',
     components: {
-        ColumnList,
+        // ColumnList,
         GlobalHeader
     },
     setup() {
+        const emailRef = reactive({
+            val: '',
+            error: false,
+            message: ''
+        })
+        const validateEmail = () => {
+            if (emailRef.val.trim() === '') {
+                emailRef.error = true
+                emailRef.message = 'can not be empty'
+            }
+        }
         return {
             list: testData,
-            currentUser
+            currentUser,
+            emailRef,
+            validateEmail
         }
     }
 })
