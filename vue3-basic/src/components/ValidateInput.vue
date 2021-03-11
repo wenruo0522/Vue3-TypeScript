@@ -34,6 +34,7 @@ export default defineComponent({
             error: false,
             message: ''
         })
+
         const validateInput = () => {
             if (props.rules) {
                 const allPassed = props.rules.every(rule => {
@@ -52,7 +53,9 @@ export default defineComponent({
                     return passed
                 })
                 inputRef.error = !allPassed
+                return allPassed
             }
+            return true
         }
 
         const updateValue = (e: KeyboardEvent) => {
