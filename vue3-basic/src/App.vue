@@ -6,25 +6,25 @@
 
             <div class='mb-3'>
                 <label class='form-label'>邮箱地址</label>
-                <validate-input :rules='emailRules'></validate-input>
+                <validate-input type='text' placeholder='请输入邮箱地址' :rules='emailRules' v-model='emailVal'/>
             </div>
 
+<!--            <div class="mb-3">-->
+<!--                <label for="exampleInputEmail" class="form-label">邮箱地址</label>-->
+<!--                <input type="email" class="form-control" id="exampleInputEmail" v-model="emailRef.val"-->
+<!--                       @blur="validateEmail">-->
+<!--                <div class="form-text" v-if="emailRef.error">{{ emailRef.message }}</div>-->
+<!--            </div>-->
             <div class="mb-3">
-                <label for="exampleInputEmail" class="form-label">邮箱地址</label>
-                <input type="email" class="form-control" id="exampleInputEmail" v-model="emailRef.val"
-                       @blur="validateEmail">
-                <div class="form-text" v-if="emailRef.error">{{ emailRef.message }}</div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword" class="form-label">密码</label>
-                <input type="password" class="form-control" id="exampleInputPassword">
+                <label class="form-label">密码</label>
+                <validate-input type="password" placeholder='请输入密码' :rules='passwordRules' v-model='passwordVal'/>
             </div>
         </form>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
 import ValidateInput, { RulesProp } from './components/ValidateInput.vue'
@@ -73,9 +73,14 @@ export default defineComponent({
     },
     setup() {
 
+        const emailVal = ref('')
+        const passwordVal = ref('')
         const emailRules: RulesProp = [
             { type: 'required', message: '电子邮箱地址不能为空' },
             { type: 'email', message: '请输入正确的电子邮箱格式' }
+        ]
+        const passwordRules: RulesProp = [
+            { type: 'required', message: '密码不能为空' }
         ]
 
         const emailRef = reactive({
@@ -97,7 +102,10 @@ export default defineComponent({
             currentUser,
             emailRef,
             validateEmail,
-            emailRules
+            emailRules,
+            emailVal,
+            passwordVal,
+            passwordRules
         }
     }
 })
