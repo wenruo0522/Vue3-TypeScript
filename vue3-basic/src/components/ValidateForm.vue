@@ -18,9 +18,10 @@ export default defineComponent({
     name: 'ValidateForm',
     emits: ['form-submit'],
     setup(props, context) {
-        const funcArr: ValidateFunc[] = []
+        let funcArr: ValidateFunc[] = []
         const submitForm = () => {
-            context.emit('form-submit', true)
+            const result = funcArr.map(func => func()).every(res => res)
+            context.emit('form-submit', result)
         }
         const callback = (func?: ValidateFunc) => {
             if (func) {
@@ -30,6 +31,7 @@ export default defineComponent({
         emitter.on('form-item-created', callback)
         onUnmounted(() => {
             emitter.off('form-item-created', callback)
+            funcArr = []
         })
         return {
             submitForm
