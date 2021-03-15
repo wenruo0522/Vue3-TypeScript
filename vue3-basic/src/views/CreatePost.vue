@@ -13,13 +13,15 @@
             <div class="mb-3">
                 <label class="form-label">文章详情：</label>
                 <validate-input v-model="contentVal"
-                                type="password"
+                                type="text"
+                                tag="textarea"
+                                rows="10"
                                 placeholder="请输入文章详情"
                                 :rules="contentRules"
                 />
             </div>
             <template #submit>
-                <button class="btn btn-primary btn-large">创建</button>
+                <button class="btn btn-primary btn-large">发表文章</button>
             </template>
         </validate-form>
     </div>
@@ -29,6 +31,7 @@
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { GlobalDataProps, PostProps } from '@/store'
 import ValidateForm from "@/components/ValidateForm.vue"
 import ValidateInput, { RulesProp } from "@/components/ValidateInput.vue"
 
@@ -41,19 +44,30 @@ export default defineComponent({
     setup() {
         const titleVal = ref('')
         const titleRules: RulesProp = [
-            { type: 'required', message: '文章标题不能为空' }
+            {type: 'required', message: '文章标题不能为空'}
         ]
 
         const contentVal = ref('')
         const contentRules: RulesProp = [
-            { type: 'required', message: '文章详情不能为空' }
+            {type: 'required', message: '文章详情不能为空'}
         ]
         const router = useRouter()
-        const store = useStore()
+        const store = useStore<GlobalDataProps>()
         const onFormSubmit = (result: boolean) => {
             if (result) {
-                router.push('/')
-                store.commit('login')
+                const { columnId } = store.state.user
+                if (columnId) {
+                    const newPost: PostProps = {
+                        id: new Date().getTime(),
+                        title: titleVal.value,
+                        content: contentVal.value,
+                        columnId,
+                        createdAt: new Date().toLocaleString()
+                    }
+                    store.commit('createPost', newPost)
+                    router.push({ name: 'column', params: { id: columnId } })
+                }
+
             }
         }
         return {
