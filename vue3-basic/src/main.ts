@@ -9,11 +9,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 axios.defaults.baseURL = 'http://apis.imooc.com/api/'
 axios.interceptors.request.use(config => {
     config.params = { ...config.params, icode: 'EDA487AFE20C48FC' }
+    store.commit('setLoading', true)
     return config
 })
 
-axios.get('columns', { params: { key: 'test' } }).then(res => {
-    console.log('res:', res)
+axios.interceptors.response.use(config => {
+    setTimeout(() => {
+        store.commit('setLoading', false)
+    }, 2000)
+    return config
 })
 
 const app = createApp(App)
