@@ -8,15 +8,16 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 axios.defaults.baseURL = 'http://apis.imooc.com/api/'
 axios.interceptors.request.use(config => {
-    config.params = { ...config.params, icode: 'EDA487AFE20C48FC' }
     store.commit('setLoading', true)
+    config.params = { ...config.params, icode: 'EDA487AFE20C48FC' }
+    config.data = { ...config.data, icode: 'EDA487AFE20C48FC' }
     return config
 })
 
 axios.interceptors.response.use(config => {
     setTimeout(() => {
         store.commit('setLoading', false)
-    }, 2000)
+    }, 1000)
     return config
 })
 
